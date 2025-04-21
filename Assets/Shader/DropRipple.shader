@@ -1,4 +1,4 @@
-Shader "Custom/Ripple"
+Shader "Custom/DropRipple"
 {
     Properties
     {
