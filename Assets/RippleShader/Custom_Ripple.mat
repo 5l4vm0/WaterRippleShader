@@ -43,7 +43,7 @@ Material:
     - _RippleSpeed: 1
     - _WaveAmplitude: 0.5
     - _WaveFrequency: 25
-    - _WaveLiftTime: 5
+    - _WaveLiftTime: 2
     - _WaveSpeed: 3
     - _WaveStrength: 0.5
     - _maxRipple: 30

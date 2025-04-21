@@ -9,34 +9,40 @@ public class ObjectCollisionRipple : MonoBehaviour
     private Vector4[] ripplePoints = new Vector4[10];
     private int rippleIndex = 0;
     private Vector2 _oldInputCentre;
+    private int waterLayerMask;
+    [SerializeField] private Collider waterTrigger; 
 
     void Start()
     {
         ripplePlaneCollider = ripplePlane.GetComponent<Collider>();
+        waterLayerMask = LayerMask.GetMask("Water");
     }
-    void OnCollisionStay(Collision other)
-    {
-        if (ripplePlaneCollider != null && other.collider == ripplePlaneCollider)
-        {
-            ContactPoint[] contactPoints = other.contacts;
-            foreach (ContactPoint contact in contactPoints)
-            {
-                // Raycast to get texture coordinate from contact point
-                Ray ray = new Ray(contact.point + contact.normal * 0.01f, -contact.normal);
-                RaycastHit hit;
 
-                if (Physics.Raycast(ray, out hit, 1.0f))
-                {
-                    Vector2 uv = hit.textureCoord;
-                    if (_oldInputCentre != null && Vector2.Distance(_oldInputCentre, uv) < 0.1f) return;
-                    
-                    ripplePoints[rippleIndex] = new Vector4(uv.x, uv.y, Time.time, 0);
-                    rippleIndex = (rippleIndex + 1) % ripplePoints.Length;
-                    _oldInputCentre = uv;
-                }
+    void OnTriggerStay(Collider other)
+    {
+        if (ripplePlaneCollider != null && other == waterTrigger)
+        {
+            
+            // Raycast from the object toward the plane
+            Vector3 origin = transform.position + Vector3.up * 0.5f;
+            Vector3 direction = Vector3.down;
+            
+            Ray ray = new Ray(origin, direction);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit, 2f, waterLayerMask))
+            {
+                Vector2 uv = hit.textureCoord;
+                
+                if (_oldInputCentre != null && Vector2.Distance(_oldInputCentre, uv) < 0.1f) return;
+
+                ripplePoints[rippleIndex] = new Vector4(uv.x, uv.y, Time.time, 0);
+                rippleIndex = (rippleIndex + 1) % ripplePoints.Length;
+                _oldInputCentre = uv;
             }
-            ripplePlane.material.SetVectorArray("_InputCentre", ripplePoints);
         }
+
+        ripplePlane.material.SetVectorArray("_InputCentre", ripplePoints);
     }
 
 }
