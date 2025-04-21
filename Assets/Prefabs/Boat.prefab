@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 3291013349104687767}
   - component: {fileID: 7912107121108422001}
   m_Layer: 0
-  m_Name: Wood_BoatV2
+  m_Name: Boat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

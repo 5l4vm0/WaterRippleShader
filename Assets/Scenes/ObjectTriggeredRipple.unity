@@ -150,19 +150,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4884537276349528629, guid: ed6c61e7a14740a41a6f87af9cdff7ab, type: 3}
---- !u!114 &158979040
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 158979038}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8789c462364bde84198760522773bc27, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ripplePlane: {fileID: 158979041}
 --- !u!23 &158979041 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: ed6c61e7a14740a41a6f87af9cdff7ab, type: 3}
@@ -179,7 +166,7 @@ GameObject:
   - component: {fileID: 172376176}
   - component: {fileID: 172376175}
   m_Layer: 0
-  m_Name: Boat
+  m_Name: BoatControl
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -373,9 +360,6 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ed6c61e7a14740a41a6f87af9cdff7ab, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 158979040}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ed6c61e7a14740a41a6f87af9cdff7ab, type: 3}
       insertIndex: -1
       addedObject: {fileID: 158979039}
