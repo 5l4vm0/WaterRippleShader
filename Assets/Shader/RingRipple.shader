@@ -56,7 +56,6 @@ Shader "Custom/RingRipple"
                 //wave radius grows over time
                 float rippleRadius = age * _WaveSpeed;
 
-                // Base cosine wave calculation
                 float wave = 1.0 - abs(distanceFromCentre - rippleRadius) * _WaveFrequency;
                 wave = saturate(wave);
 

@@ -7,23 +7,27 @@ public class ObjectCollisionRipple : MonoBehaviour
     private bool isInWater = false;
     [SerializeField] private MeshRenderer ripplePlane;
     private Collider ripplePlaneCollider;
-    private Vector4[] ripplePoints =  new Vector4[10];
+    private Vector4[] ripplePoints = new Vector4[10];
     private int rippleIndex = 0;
     private Vector2 _oldInputCentre;
     private int waterLayerMask;
-    [SerializeField] private Collider waterTrigger; 
+    [SerializeField] private Collider waterTrigger;
+    [SerializeField] bool isFloatingWithWater = true;
+    [SerializeField] float moveUpHeight = 2f;
+    private Rigidbody rb;
 
     void Start()
     {
         ripplePlaneCollider = ripplePlane.GetComponent<Collider>();
         waterLayerMask = LayerMask.GetMask("Water");
+        rb = GetComponent<Rigidbody>(); 
     }
 
     void OnTriggerEnter(Collider other)
     {
         if (ripplePlaneCollider != null && other == waterTrigger)
         {
-        isInWater = true;
+            isInWater = true;
         }
     }
 
@@ -35,9 +39,9 @@ public class ObjectCollisionRipple : MonoBehaviour
         }
     }
 
-    void Update()
+    void FixedUpdate()
     {
-        if(!isInWater) return;
+        if (!isInWater) return;
 
         //Raycast from the object toward the plane
         Vector3 origin = transform.position + Vector3.up * 0.5f;
@@ -56,7 +60,22 @@ public class ObjectCollisionRipple : MonoBehaviour
             rippleIndex = (rippleIndex + 1) % ripplePoints.Length;
             _oldInputCentre = uv;
             ripplePlane.material.SetVectorArray("_InputCentre", ripplePoints);
+
+            //Moving boat up and down
+            if (!isFloatingWithWater) return;
+            //SetObjectHeight(hit.point.y + moveUpHeight);
+            rb.AddForceAtPosition(Vector3.up * moveUpHeight, hit.point);
         }
 
+
     }
+
+    private void SetObjectHeight(float targetHeight)
+    {
+        Vector3 currentPos = transform.position;
+        currentPos.y = Mathf.Lerp(currentPos.y, targetHeight, Time.deltaTime * 2);
+        transform.position = currentPos;
+    }
+    
+    
 }
