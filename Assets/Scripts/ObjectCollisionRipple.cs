@@ -15,12 +15,15 @@ public class ObjectCollisionRipple : MonoBehaviour
     [SerializeField] bool isFloatingWithWater = true;
     [SerializeField] float moveUpHeight = 2f;
     private Rigidbody rb;
+    [SerializeField] RenderTexture renderTexture;
+    [SerializeField] private Transform waterPlane;
 
     void Start()
     {
         ripplePlaneCollider = ripplePlane.GetComponent<Collider>();
         waterLayerMask = LayerMask.GetMask("Water");
-        rb = GetComponent<Rigidbody>(); 
+        rb = GetComponent<Rigidbody>();
+        ripplePlane.material.EnableKeyword("OUTPUT_RIPPLE_ONLY");
     }
 
     void OnTriggerEnter(Collider other)
@@ -42,7 +45,6 @@ public class ObjectCollisionRipple : MonoBehaviour
     void FixedUpdate()
     {
         if (!isInWater) return;
-
         //Raycast from the object toward the plane
         Vector3 origin = transform.position + Vector3.up * 0.5f;
         Vector3 direction = Vector3.down;
@@ -59,23 +61,30 @@ public class ObjectCollisionRipple : MonoBehaviour
             ripplePoints[rippleIndex] = new Vector4(uv.x, uv.y, Time.time, 0);
             rippleIndex = (rippleIndex + 1) % ripplePoints.Length;
             _oldInputCentre = uv;
+
+            //Set ripple centre (ray hit point) to ripple material
             ripplePlane.material.SetVectorArray("_InputCentre", ripplePoints);
 
             //Moving boat up and down
             if (!isFloatingWithWater) return;
-            //SetObjectHeight(hit.point.y + moveUpHeight);
-            rb.AddForceAtPosition(Vector3.up * moveUpHeight, hit.point);
+
+            SetObjectHeight(hit.point.y + moveUpHeight);
+            rb.useGravity = false;
+            StartCoroutine(EnableGravity());
         }
-
-
     }
 
     private void SetObjectHeight(float targetHeight)
     {
         Vector3 currentPos = transform.position;
-        currentPos.y = Mathf.Lerp(currentPos.y, targetHeight, Time.deltaTime * 2);
+        currentPos.y = Mathf.Lerp(currentPos.y, targetHeight, Time.fixedDeltaTime * 0.5f);
         transform.position = currentPos;
     }
-    
-    
+
+    //Fake boat skipping wave
+    private IEnumerator EnableGravity()
+    {
+        yield return new WaitForSeconds(0.5f);
+        rb.useGravity = true;
+    }
 }

@@ -9,12 +9,19 @@ Shader "Custom/RingRipple"
         _WaveFrequency("Wave Frequency", float) = 25
         _WaveSpeed("Wave Speed", float) = 3
         _WaveStrength("Wave Strength", float) = 0.3
+        _StencilRef("Stencil Ref", Range(0,255)) = 1
     }
 
     SubShader
     {
         pass
         {   
+            Stencil{
+                ref [_StencilRef]
+                comp Equal
+                pass replace
+            }
+
             CGPROGRAM
 
             #include "UnityCG.cginc"
@@ -101,7 +108,11 @@ Shader "Custom/RingRipple"
                     combinedWave += Wave(o.uv, _InputCentre[n].xy,_InputCentre[n].z);
                 }
                 
+                #ifdef OUTPUT_RIPPLE_ONLY
+                return float4 (0.0, saturate(combinedWave*_Color)+tex.r, 0, 0, 1);
+                #else
                 return max(0.0, saturate(combinedWave*_Color)+tex);
+                #endif
             }
 
             ENDCG
