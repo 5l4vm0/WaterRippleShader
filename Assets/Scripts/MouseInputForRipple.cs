@@ -6,7 +6,7 @@ using UnityEngine;
 public class MouseInputForRipple : MonoBehaviour
 {
     [SerializeField] private MeshRenderer ripplePlane;
-    private Vector4[] ripplePoints = new Vector4[10];
+    private Vector4[] ripplePoints = new Vector4[20];
     private int rippleIndex = 0;
     private Vector2 _oldInputCentre;
     private int waterLayerMask;
@@ -24,7 +24,7 @@ public class MouseInputForRipple : MonoBehaviour
             if(Physics.Raycast(ray, out RaycastHit hit, waterLayerMask))
             {
                 // Don't add to ripple if mouse position is too closed to the old mouse position
-                if(_oldInputCentre == null || Vector2.Distance(_oldInputCentre, hit.textureCoord) < 0.1f) return;
+                if(_oldInputCentre == null || Vector2.Distance(_oldInputCentre, hit.textureCoord) < 0.05f) return;
 
                 ripplePoints[rippleIndex] = new Vector4(hit.textureCoord.x,hit.textureCoord.y, Time.time,0);
                 rippleIndex = (rippleIndex + 1) % ripplePoints.Length;

@@ -15,15 +15,12 @@ public class ObjectCollisionRipple : MonoBehaviour
     [SerializeField] bool isFloatingWithWater = true;
     [SerializeField] float moveUpHeight = 2f;
     private Rigidbody rb;
-    [SerializeField] RenderTexture renderTexture;
-    [SerializeField] private Transform waterPlane;
 
     void Start()
     {
         ripplePlaneCollider = ripplePlane.GetComponent<Collider>();
         waterLayerMask = LayerMask.GetMask("Water");
         rb = GetComponent<Rigidbody>();
-        ripplePlane.material.EnableKeyword("OUTPUT_RIPPLE_ONLY");
     }
 
     void OnTriggerEnter(Collider other)

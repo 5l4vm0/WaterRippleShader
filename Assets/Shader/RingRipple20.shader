@@ -1,4 +1,4 @@
-Shader "Custom/RingRipple"
+Shader "Custom/RingRipple20"
 {
     Properties
     {
@@ -34,7 +34,7 @@ Shader "Custom/RingRipple"
             float _Decay, _WaveLiftTime, _WaveFrequency, _WaveSpeed, _WaveStrength;
 
             //InputCentre array : xy = input centre, z = start time
-            float4 _InputCentre[10];
+            float4 _InputCentre[20];
             
             struct VertexInput
             {
@@ -83,7 +83,7 @@ Shader "Custom/RingRipple"
 
                 // Accumulate up to 10 waves
                 UNITY_LOOP
-                for(int n =0; n<10; n++)
+                for(int n =0; n<20; n++)
                 {
                     combinedWave += Wave(i.uv, _InputCentre[n].xy,_InputCentre[n].z);
                 }
@@ -102,17 +102,13 @@ Shader "Custom/RingRipple"
 
                 // Accumulate wave intensity again for visual effect
                 UNITY_LOOP
-                for(int n =0; n<10; n++)
+                for(int n =0; n<20; n++)
                 {
                     if(combinedWave > 1.0) continue;
                     combinedWave += Wave(o.uv, _InputCentre[n].xy,_InputCentre[n].z);
                 }
                 
-                #ifdef OUTPUT_RIPPLE_ONLY
-                return float4 (0.0, saturate(combinedWave*_Color)+tex.r, 0, 0, 1);
-                #else
                 return max(0.0, saturate(combinedWave*_Color)+tex);
-                #endif
             }
 
             ENDCG
