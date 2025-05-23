@@ -1,20 +1,28 @@
-Shader "Custom/DropRipple"
+Shader "Custom/RingRipple_Intensive"
 {
     Properties
     {
         _Color("Color", Color) = (1,1,1,1)
         _Texture("Texture", 2D) = "white"{}
-        _Decay("Decay", float) = 5
+        _Decay("Decay", Range(0,20)) = 5
         _WaveLiftTime("Wave Life Time", Range(1,10)) = 2
-        _WaveFrequency("Wave Frequency", float) = 25
-        _WaveSpeed("Wave Speed", float) = 3
-        _WaveStrength("Wave Strength", float) = 0.3
+        _WaveFrequency("Wave Frequency", Range(0,100)) = 25
+        _WaveSpeed("Wave Speed", Range(0,10)) = 3
+        _WaveStrength("Wave Strength", Range(0,5)) = 0.3
+        _WaveOffset("Wave Offset", Range(0,1)) = 0
+        _StencilRef("Stencil Ref", Range(0,255)) = 1
     }
 
     SubShader
     {
         pass
         {   
+           Stencil{
+                ref [_StencilRef]
+                comp Equal
+                pass replace
+            }
+
             CGPROGRAM
 
             #include "UnityCG.cginc"
@@ -24,10 +32,10 @@ Shader "Custom/DropRipple"
 
             float4 _Color;
             sampler2D _Texture;
-            float _Decay, _WaveLiftTime, _WaveFrequency, _WaveSpeed, _WaveStrength;
+            float _Decay, _WaveLiftTime, _WaveFrequency, _WaveSpeed, _WaveStrength, _WaveOffset;
 
             //InputCentre array : xy = input centre, z = start time
-            float4 _InputCentre[10];
+            float4 _InputCentre[100];
             
             struct VertexInput
             {
@@ -53,8 +61,11 @@ Shader "Custom/DropRipple"
                 float2 offset = uv-centre;
                 float distanceFromCentre = length(offset);
                 
-                // Base cosine wave calculation
-                float wave = cos(distanceFromCentre *_WaveFrequency - _Time.y*_WaveSpeed)*0.5+0.5;
+                //wave radius grows over time
+                float rippleRadius = age * _WaveSpeed;
+
+                float wave = 1.0 - abs(distanceFromCentre - rippleRadius) * _WaveFrequency;
+                wave = saturate(wave);
 
                 //distance-based decay
                 float spatialDecay = 1.0 - saturate(distanceFromCentre * _Decay);
@@ -73,13 +84,13 @@ Shader "Custom/DropRipple"
 
                 // Accumulate up to 10 waves
                 UNITY_LOOP
-                for(int n =0; n<10; n++)
+                for(int n =0; n<100; n++)
                 {
                     combinedWave += Wave(i.uv, _InputCentre[n].xy,_InputCentre[n].z);
                 }
 
                 // Offset vertex height by combined wave
-                i.pos.y = combinedWave*0.5;
+                i.pos.y = combinedWave*0.5 * _WaveOffset;
                 o.pos = UnityObjectToClipPos(i.pos);
                 o.uv = i.uv;
                 return o;
@@ -92,7 +103,7 @@ Shader "Custom/DropRipple"
 
                 // Accumulate wave intensity again for visual effect
                 UNITY_LOOP
-                for(int n =0; n<10; n++)
+                for(int n =0; n<100; n++)
                 {
                     if(combinedWave > 1.0) continue;
                     combinedWave += Wave(o.uv, _InputCentre[n].xy,_InputCentre[n].z);

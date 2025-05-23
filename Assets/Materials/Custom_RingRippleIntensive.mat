@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Custom_RingRipple20
+  m_Name: Custom_RingRippleIntensive
   m_Shader: {fileID: 4800000, guid: e545d8268a96d6243a944f062fbe9d25, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0

@@ -6,7 +6,7 @@ using UnityEngine;
 public class MouseInputForRipple : MonoBehaviour
 {
     [SerializeField] private MeshRenderer ripplePlane;
-    private Vector4[] ripplePoints = new Vector4[20];
+    private Vector4[] ripplePoints = new Vector4[100];
     private int rippleIndex = 0;
     private Vector2 _oldInputCentre;
     private int waterLayerMask;
