@@ -2,9 +2,9 @@
 
 A dynamic ripple effect system for Unity that visualises water surface interaction through both **object collisions** and **mouse input**. This system is ideal for simulations, stylised water surfaces, or interactive environments.
 
-https://github.com/user-attachments/assets/bc0835e2-e68e-4fb9-a042-58916710b8e6
+https://github.com/user-attachments/assets/de1b14c9-ebf9-4d1f-a244-fc54cb6afe06
 
-[YoutubeLink](https://youtu.be/pCo4Ly14AVQ)
+[YoutubeLink](https://youtu.be/0kJwr1bbHis)
 
 
 ## Features
