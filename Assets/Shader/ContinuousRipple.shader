@@ -30,6 +30,7 @@ Shader "Custom/ContinuousRipple"
 
             float4 _Color;
             sampler2D _Texture;
+            float4 _Texture_ST;
             float _Decay, _WaveFrequency, _WaveSpeed, _WaveStrength;
 
             //InputCentre array : xy = input centre, z = start time
@@ -85,7 +86,7 @@ Shader "Custom/ContinuousRipple"
                 wave = Wave(i.uv,_InputCentre.xy,_InputCentre.z);
                 i.pos.y = wave*0.5;
                 o.pos = UnityObjectToClipPos(i.pos);
-                o.uv = i.uv;
+                o.uv = TRANSFORM_TEX(i.uv, _Texture);
                 return o;
             }
 

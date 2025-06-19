@@ -29,7 +29,7 @@ Shader "Custom/RingRipple_Lite"
             #pragma vertex vert
             #pragma fragment frag
 
-            float4 _Color;
+            float4 _Color, _Texture_ST;
             sampler2D _Texture;
             float _Decay, _WaveLiftTime, _WaveFrequency, _WaveSpeed, _WaveStrength;
 
@@ -91,7 +91,7 @@ Shader "Custom/RingRipple_Lite"
                 // Offset vertex height by combined wave
                 i.pos.y = combinedWave*0.5;
                 o.pos = UnityObjectToClipPos(i.pos);
-                o.uv = i.uv;
+                o.uv = TRANSFORM_TEX(i.uv, _Texture);
                 return o;
             }
 
