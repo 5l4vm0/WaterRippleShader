@@ -33,6 +33,7 @@ Material:
     - _StencilRef: 0
     - _WaveFrequency: 25
     - _WaveLiftTime: 2
+    - _WaveOffset: 0.5
     - _WaveSpeed: 0.1
     - _WaveStrength: 0.5
     m_Colors:
