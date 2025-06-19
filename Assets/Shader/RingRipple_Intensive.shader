@@ -47,6 +47,7 @@ Shader "Custom/RingRipple_Intensive"
             {
                 float4 pos: SV_POSITION;
                 float2 uv:TEXCOORD;
+                float2 rawUV:TESSFACTOR1;
             };
             
             //wave calculation
@@ -92,6 +93,7 @@ Shader "Custom/RingRipple_Intensive"
                 // Offset vertex height by combined wave
                 i.pos.y = combinedWave*0.5 * _WaveOffset;
                 o.pos = UnityObjectToClipPos(i.pos);
+                o.rawUV = i.uv;
                 o.uv = TRANSFORM_TEX(i.uv, _Texture);
                 return o;
             }
@@ -106,7 +108,7 @@ Shader "Custom/RingRipple_Intensive"
                 for(int n =0; n<100; n++)
                 {
                     if(combinedWave > 1.0) continue;
-                    combinedWave += Wave(o.uv, _InputCentre[n].xy,_InputCentre[n].z);
+                    combinedWave += Wave(o.rawUV, _InputCentre[n].xy,_InputCentre[n].z);
                 }
                 
                 return max(0.0, saturate(combinedWave*_Color)+tex);

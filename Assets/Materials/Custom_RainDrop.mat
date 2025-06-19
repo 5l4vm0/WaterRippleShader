@@ -24,7 +24,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _Texture:
-        m_Texture: {fileID: 2800000, guid: 717d295e1c2bb4141ad1084cb48707cf, type: 3}
+        m_Texture: {fileID: 2800000, guid: 6ee80edd22925394ab14fe0c69f63d4a, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
@@ -33,6 +33,7 @@ Material:
     - _StencilRef: 0
     - _WaveFrequency: 48
     - _WaveLiftTime: 1
+    - _WaveOffset: 0
     - _WaveSpeed: 0.1
     - _WaveStrength: 0.5
     m_Colors:

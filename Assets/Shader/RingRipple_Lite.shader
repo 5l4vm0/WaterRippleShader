@@ -39,13 +39,14 @@ Shader "Custom/RingRipple_Lite"
             struct VertexInput
             {
                 float4 pos: POSITION;
-                float2 uv:TEXCOORD;
+                float2 uv:TEXCOORD0;
             };
             
             struct VertexOutput
             {
                 float4 pos: SV_POSITION;
-                float2 uv:TEXCOORD;
+                float2 uv:TEXCOORD0;
+                float2 rawUV:TEXCOORD1;
             };
             
             //wave calculation
@@ -91,6 +92,7 @@ Shader "Custom/RingRipple_Lite"
                 // Offset vertex height by combined wave
                 i.pos.y = combinedWave*0.5;
                 o.pos = UnityObjectToClipPos(i.pos);
+                o.rawUV = i.uv;
                 o.uv = TRANSFORM_TEX(i.uv, _Texture);
                 return o;
             }
@@ -105,7 +107,7 @@ Shader "Custom/RingRipple_Lite"
                 for(int n =0; n<10; n++)
                 {
                     if(combinedWave > 1.0) continue;
-                    combinedWave += Wave(o.uv, _InputCentre[n].xy,_InputCentre[n].z);
+                    combinedWave += Wave(o.rawUV, _InputCentre[n].xy,_InputCentre[n].z);
                 }
                 return max(0.0, saturate(combinedWave*_Color)+tex);
             }
